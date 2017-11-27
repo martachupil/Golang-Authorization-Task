@@ -20,7 +20,7 @@ type Profile struct {
 }
 
 func index_handler(w http.ResponseWriter, r *http.Request) {
-	profile := Profile{"Marta", []string{"sport", "programming"}}
+	profile := Profile{"Guest", []string{"sport", "programming"}}
 
 	fp := path.Join("templates", "index.html")
 	tmpl, err := template.ParseFiles(fp)

@@ -3,13 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="../client/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/lux/bootstrap.min.css">
 </head>
 <body>
-<h1>Hello {{ .Name }}</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 
-<h3><a href="/login">Login</a></h3>
-<h3><a href="/signup">Sign Up</a></h3>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <h1 class="navbar-brand">Hello {{ .Name }}</h1>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/signup">Sign Up</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="row">
+    <div class="container text-center" style="padding: 15px">
+        <h2>Lorem ipsum dolor sit amet</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="container">
+        <div class="col-md-12">
+            <div class="card border-primary" style="padding: 15px">
+                <p>Lorem ipsum dolor sit amet, esse accusata pertinax nec et. Vidisse abhorreant et mea.
+                    Id idque cetero timeam per, no tation causae theophrastus pro, duo suas perfecto in. Id quo essent audiam option, pri id munere partem.</p>
+
+                <p>In suas veri eam, feugait erroribus reprimique ad eam, corpora democritum pro te. Mei at erat altera vivendo,
+                    vel et natum sonet ubique. Mea ei utroque detraxit democritum. Scripta argumentum est ei. Doctus deserunt duo et,
+                    soluta nominavi theophrastus ad sed, mei reque lucilius sadipscing an.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
