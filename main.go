@@ -103,20 +103,21 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 	case err == sql.ErrNoRows:
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		if err != nil {
-			http.Error(res, "Server error, unable to create your account.", 500)
+
+			http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
 			return
 		}
 
 		_, err = db.Exec("INSERT INTO users(username, password) VALUES(?, ?)", username, hashedPassword)
 		if err != nil {
-			http.Error(res, "Server error, unable to create your account.", 500)
+			http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
 			return
 		}
 
 		res.Write([]byte("User created!"))
 		return
 	case err != nil:
-		http.Error(res, "Server error, unable to create your account.", 500)
+		http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
 		return
 	default:
 		http.Redirect(res, req, "/", 301)
@@ -126,7 +127,7 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 func main() {
 
 	// we create here an sql.DB and checking for errors
-	db, err = sql.Open("mysql", "root:root@/mysql")
+	db, err = sql.Open("mysql", "root:root@/mchsite")
 	if err != nil {
 		panic(err.Error())
 	}
