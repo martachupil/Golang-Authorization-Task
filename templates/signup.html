@@ -31,11 +31,29 @@
     </div>
 </nav>
 
-<h1>SignUp Page</h1>
-<form method="POST" action="/signup">
-    <input type="text" name="username" placeholder="username">
-    <input type="password" name="password" placeholder="password">
-    <input type="submit" value="SignUp">
-</form>
+<div class="col-md-12" style="padding: 15px;">
+    <form method="POST" action="/signup">
+        <fieldset>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text"
+                       name="username"
+                       class="form-control"
+                       placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password"
+                       class="form-control"
+                       name="password"
+                       placeholder="Password">
+            </div>
+            <button
+                    type="submit"
+                    class="btn btn-primary"
+                    value="SignUp">SignUp</button>
+        </fieldset>
+    </form>
+</div>
 </body>
 </html>
