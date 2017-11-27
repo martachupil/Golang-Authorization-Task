@@ -2,14 +2,57 @@
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/lux/bootstrap.min.css">
 </head>
 
 <body>
-<h1>Login Page</h1>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <h1 class="navbar-brand">Login Page</h1>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/signup">Sign Up</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/about">About</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="col-md-12" style="padding: 15px;">
 <form method="POST" action="/login">
-    <input type="text" name="username" placeholder="username">
-    <input type="password" name="password" placeholder="password">
-    <input type="submit" value="Login">
+    <fieldset>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text"
+                   name="username"
+                   class="form-control"
+                   placeholder="Enter your username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password"
+                   class="form-control"
+                   name="password"
+                   placeholder="Password">
+        </div>
+        <button
+                type="submit"
+                class="btn btn-primary"
+                value="Login">Submit</button>
+    </fieldset>
 </form>
+</div>
 </body>
 </html>
