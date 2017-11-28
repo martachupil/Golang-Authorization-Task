@@ -8,6 +8,8 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
+	"log"
+	"strings"
 )
 
 var db *sql.DB
@@ -24,8 +26,12 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	username := req.FormValue("username")
-	password := req.FormValue("password")
+	username := strings.TrimSpace(req.FormValue("username"))
+	password := strings.TrimSpace(req.FormValue("password"))
+
+	if username == "" && password == ""{
+		log.Fatal("empty usermane and password")
+	}
 
 	var user string
 
