@@ -31,45 +31,52 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 	password_2 := req.FormValue("password_2")
 	email := strings.TrimSpace(req.FormValue("email"))
 
+	var errors [] string
+
 	if username == "" {
+		errors = append(errors, "empty username")
 		log.Fatal("empty username")
 	}
 	if password == "" {
+		errors = append(errors, "empty password")
 		log.Fatal("empty password")
 	}
 	if email == "" {
+		errors = append(errors, "empty email")
 		log.Fatal("empty email")
 	}
 	if (password_2 != password) {
 		log.Fatal("diff pass added")
 	}
 
-	var user string
+	if len(errors) == 0 {
+		var user string
 
-	err := db.QueryRow("SELECT username FROM users WHERE username=?", username).Scan(&user)
+		err := db.QueryRow("SELECT username FROM users WHERE username=?", username).Scan(&user)
 
-	switch {
-	case err == sql.ErrNoRows:
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-		if err != nil {
+		switch {
+		case err == sql.ErrNoRows:
+			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+			if err != nil {
 
+				http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
+				return
+			}
+
+			_, err = db.Exec("INSERT INTO users(username, password) VALUES(?, ?)", username, hashedPassword)
+			if err != nil {
+				http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
+				return
+			}
+
+			res.Write([]byte("User created!"))
+			return
+		case err != nil:
 			http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
 			return
+		default:
+			http.Redirect(res, req, "/", 301)
 		}
-
-		_, err = db.Exec("INSERT INTO users(username, password) VALUES(?, ?)", username, hashedPassword)
-		if err != nil {
-			http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
-			return
-		}
-
-		res.Write([]byte("User created!"))
-		return
-	case err != nil:
-		http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
-		return
-	default:
-		http.Redirect(res, req, "/", 301)
 	}
 }
 
