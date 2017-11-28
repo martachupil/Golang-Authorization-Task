@@ -28,9 +28,20 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 
 	username := strings.TrimSpace(req.FormValue("username"))
 	password := strings.TrimSpace(req.FormValue("password"))
+	password_2 := req.FormValue("password_2")
+	email := strings.TrimSpace(req.FormValue("email"))
 
-	if username == "" && password == ""{
-		log.Fatal("empty usermane and password")
+	if username == "" {
+		log.Fatal("empty username")
+	}
+	if password == "" {
+		log.Fatal("empty password")
+	}
+	if email == "" {
+		log.Fatal("empty email")
+	}
+	if (password_2 != password) {
+		log.Fatal("diff pass added")
 	}
 
 	var user string
