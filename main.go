@@ -8,8 +8,8 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
-	"log"
 	"strings"
+	"log"
 )
 
 var db *sql.DB
@@ -35,20 +35,20 @@ func signupPage(res http.ResponseWriter, req *http.Request) {
 
 	if username == "" {
 		errors = append(errors, "empty username")
-		log.Fatal("empty username")
 	}
 	if password == "" {
 		errors = append(errors, "empty password")
-		log.Fatal("empty password")
 	}
 	if email == "" {
 		errors = append(errors, "empty email")
-		log.Fatal("empty email")
 	}
 	if (password_2 != password) {
-		log.Fatal("diff pass added")
+		//log.Fatal("diff pass added")
 	}
 
+	if req.Method == "POST" && len(errors) > 0 {
+		log.Fatal(errors)
+	}
 	if len(errors) == 0 {
 		var user string
 
