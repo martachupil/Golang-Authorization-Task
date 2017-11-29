@@ -7,10 +7,7 @@ import (
 	"path"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/martachupil/golang-mch-project/auth"
-	//"golang.org/x/crypto/bcrypt"
-	//"strings"
-	//"log"
+	"./auth"
 )
 
 var db *sql.DB

@@ -30,9 +30,9 @@
         </ul>
     </div>
 </nav>
-
+<div id="errors"></div>
 <div class="col-md-12" style="padding: 15px;">
-    <form method="POST" action="/signup">
+    <form method="POST" action="/signup" onsubmit="signup()">
         <fieldset>
             <div class="form-group">
                 <label for="username">Username</label>
@@ -67,11 +67,30 @@
             </div>
 
             <button
-                    type="submit"
+                    type="button"
                     class="btn btn-primary"
+                    onclick="signup()"
                     value="SignUp">SignUp</button>
         </fieldset>
     </form>
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+
+    function signup() {
+        axios.post('/signup', {foo: 1})
+                .then((resp) => console.log(resp))
+                .catch(err => {
+                    console.warn(err.response.data);
+                    err.response.data.forEach((e) => printAlert(e));
+                });
+        return false;
+    }
+
+    function printAlert(msg) {
+        document.querySelector('#errors').innerHTML += `<div class="alert alert-danger">${msg}</div>`;
+    }
+
+</script>
 </body>
 </html>

@@ -1,23 +1,26 @@
 package auth
 
 import (
-	"log"
 	"database/sql"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"path"
 	"strings"
+	//"github.com/PuerkitoBio/goquery"
+	"encoding/json"
 )
 
 type Instance struct {
 	DB *sql.DB
 }
 
+
 func (i Instance) SignupPage(res http.ResponseWriter, req *http.Request) {
 	if req.Method != "POST" {
 		http.ServeFile(res, req, path.Join("templates", "signup.html"))
 		return
 	}
+
 
 	username := strings.TrimSpace(req.FormValue("username"))
 	password := strings.TrimSpace(req.FormValue("password"))
@@ -40,7 +43,11 @@ func (i Instance) SignupPage(res http.ResponseWriter, req *http.Request) {
 	}
 
 	if req.Method == "POST" && len(errors) > 0 {
-		log.Fatal(errors)
+		text, _ := json.Marshal(errors)
+		res.WriteHeader(http.StatusBadRequest)
+		res.Header().Set("Content-Type", "application/json")
+		res.Write([]byte(text))
+		return
 	}
 	if len(errors) == 0 {
 		var user string
