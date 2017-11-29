@@ -4,6 +4,8 @@
 *.dll
 *.so
 *.dylib
+src/
+pkg/
 
 # Test binary, build with `go test -c`
 *.test
@@ -17,3 +19,4 @@
 # IntellijIdea files
 *.iml
 .idea
+
