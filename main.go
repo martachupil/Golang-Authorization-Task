@@ -7,9 +7,10 @@ import (
 	"path"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-	"golang.org/x/crypto/bcrypt"
-	"strings"
-	"log"
+	"github.com/martachupil/golang-mch-project/auth"
+	//"golang.org/x/crypto/bcrypt"
+	//"strings"
+	//"log"
 )
 
 var db *sql.DB
@@ -20,94 +21,6 @@ type Profile struct {
 	Hobbies []string
 }
 
-func signupPage(res http.ResponseWriter, req *http.Request) {
-	if req.Method != "POST" {
-		http.ServeFile(res, req, path.Join("templates", "signup.html"))
-		return
-	}
-
-	username := strings.TrimSpace(req.FormValue("username"))
-	password := strings.TrimSpace(req.FormValue("password"))
-	password_2 := req.FormValue("password_2")
-	email := strings.TrimSpace(req.FormValue("email"))
-
-	var errors [] string
-
-	if username == "" {
-		errors = append(errors, "empty username")
-	}
-	if password == "" {
-		errors = append(errors, "empty password")
-	}
-	if email == "" {
-		errors = append(errors, "empty email")
-	}
-	if (password_2 != password) {
-		//log.Fatal("diff pass added")
-	}
-
-	if req.Method == "POST" && len(errors) > 0 {
-		log.Fatal(errors)
-	}
-	if len(errors) == 0 {
-		var user string
-
-		err := db.QueryRow("SELECT username FROM users WHERE username=?", username).Scan(&user)
-
-		switch {
-		case err == sql.ErrNoRows:
-			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-			if err != nil {
-
-				http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
-				return
-			}
-
-			_, err = db.Exec("INSERT INTO users(username, password) VALUES(?, ?)", username, hashedPassword)
-			if err != nil {
-				http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
-				return
-			}
-
-			res.Write([]byte("User created!"))
-			return
-		case err != nil:
-			http.Error(res, "Server error, unable to create your account." + err.Error(), 500)
-			return
-		default:
-			http.Redirect(res, req, "/", 301)
-		}
-	}
-}
-
-func loginPage(res http.ResponseWriter, req *http.Request) {
-	if req.Method != "POST" {
-		http.ServeFile(res, req, path.Join("templates", "login.html"))
-		return
-	}
-
-	username := req.FormValue("username")
-	password := req.FormValue("password")
-
-	var databaseUsername string
-	var databasePassword string
-
-	err := db.QueryRow("SELECT username, password FROM users WHERE username=?", username).Scan(&databaseUsername, &databasePassword)
-
-	if err != nil {
-		http.Redirect(res, req, "/login", 301)
-		return
-	}
-
-	err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(password))
-	if err != nil {
-		http.Redirect(res, req, "/login", 301)
-		return
-	}
-
-	res.Write([]byte("Hello" + databaseUsername))
-
-}
 
 func index_handler(w http.ResponseWriter, r *http.Request) {
 	profile := Profile{"Guest", []string{"sport", "programming"}}
@@ -165,10 +78,12 @@ func main() {
 		panic(err.Error())
 	}
 
+	au := auth.Instance{DB:db}
 
 	http.HandleFunc("/", index_handler)
 	http.HandleFunc("/about/", about_handler)
-	http.HandleFunc("/signup", signupPage)
-	http.HandleFunc("/login", loginPage)
-	http.ListenAndServe(":8000", nil)
+	http.HandleFunc("/signup", au.SignupPage)
+	http.HandleFunc("/login", au.LoginPage)
+
+	fmt.Println(http.ListenAndServe(":8001", nil))
 }
